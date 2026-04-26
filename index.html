@@ -500,22 +500,10 @@
 
     <p>I simulated two years of historical Friday night Uber trip data near WWU's campus in Bellingham — 104 weeks capturing a realistic upward trend as Uber's market grew, summer seasonality, a sharp late-December drop when students leave, and a New Year's Eve spike that dwarfs every other week. With that dataset in hand, I engineered four features the model could actually use: a week index to capture trend, a summer flag, a school-year flag (the single most important signal for a campus market), and a NYE indicator to isolate that one anomalous night each year. I then trained a linear regression model on the first 78 weeks and held the final 26 weeks back entirely — data the model never saw — as a backtest window to measure real predictive accuracy before trusting it with a live decision.</p>
 
-    <!-- Chart image placeholder -->
-    <div class="img-placeholder">
-      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-        <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/>
-      </svg>
-      <span>Paste your backtest chart image here</span>
-      <span style="font-size:10px; opacity:0.5;">Replace this block with an &lt;img&gt; tag pointing to wwu_uber_backtest.png</span>
-    </div>
+    <img src="wwu_uber_backtest.png" alt="Backtest chart: Friday Night Demand showing actual trips as a solid cyan line across all 104 weeks, with the model's dashed orange prediction line for the test window (weeks 79–104) and a shaded ±15% tolerance band. Test MAE: 32.2 trips, 8.0% average error." style="width:100%;border-radius:8px;margin:2rem 0;display:block;">
 
-    <!-- Student: replace the placeholder block above with:
-         <img src="wwu_uber_backtest.png" alt="Backtest chart showing predicted vs actual Friday night trips" style="width:100%;border-radius:8px;margin:2rem 0;">
-    -->
-
-    <div class="placeholder">
-      <p class="placeholder-label">Your chart description</p>
-      <p>[PASTE YOUR BACKTEST CHART DESCRIPTION HERE — 2–3 sentences describing where the model tracked reality and where it diverged. Example: "The model tracked the school-year rhythm reliably across the test window, staying within the ±15% band for most weeks. The sharpest divergence appeared at the NYE spike in late December, where the model underestimated demand by roughly 40% — a predictable failure given it had only one prior NYE to learn from."]</p>
+    <div class="callout" style="margin-top:0;">
+      <p>Through the test window, the model tracked the school-year baseline reliably — the dashed orange prediction stayed close to actual demand from July through November 2024, with most weeks falling inside the ±15% tolerance band and a test MAE of just 32.2 trips (8% average error). The sharpest divergence appears at the very end of the window: the NYE crash in late December 2024, where actual trips plunged well below the lower bound of the model's range — a predictable failure, since the model had only one prior late-December collapse to learn from and couldn't fully anticipate the magnitude of the student exodus.</p>
     </div>
 
     <div class="callout">
@@ -535,10 +523,45 @@
         <span class="memo-dot"></span>
         <span class="memo-title">Uber Bellingham — Operations Memo &mdash; Auto-generated</span>
       </div>
-      <div class="placeholder" style="margin:0; border-style: dashed;">
-        <p class="placeholder-label">Your memo output</p>
-        <p>[PASTE YOUR CONCERT NIGHT MEMO HERE — copy the exact text your Step 3 code printed between the ╔═╗ borders. Paste it inside a &lt;pre&gt; tag to preserve spacing, or simply paste the plain text.]</p>
-      </div>
+      <pre style="font-family:'DM Mono',monospace; font-size:12px; color:rgba(255,255,255,0.75); line-height:1.8; white-space:pre-wrap; word-break:break-word;">DATE    : April 25, 2026
+EVENT   : Death Cab for Cutie / Sleater-Kinney / ODESZA
+          Homecoming Concert — WWU Campus
+SHOW    : Ends 10:00pm Friday
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+FORECAST SUMMARY
+
+  Predicted Friday night trips :  406
+  Operational range (±15%)     :  345 – 467 trips
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+DRIVER POSITIONING  (be online by 9:45pm)
+
+  Conservative (low scenario)  :  46 drivers
+  Planning target              :  54 drivers
+  Maximum coverage (high)      :  63 drivers
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SURGE PRICING
+
+  Recommendation : ACTIVATE surge pricing at 9:30pm.
+
+  Reason: Upper-bound demand requires 63 drivers but only ~25
+  are typically online; surge pricing must start by 9:30pm to
+  attract additional supply before the 10pm crowd exits.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+RISK FLAG
+
+  Demand could exceed the upper bound if a large pre-show
+  or after-party draws additional riders who were not planning
+  to use Uber earlier in the evening, or if rain (common in
+  Bellingham in fall) discourages walking and spikes app opens
+  sharply at 10pm.</pre>
     </div>
   </section>
 
@@ -549,9 +572,8 @@
 
     <p>Before sending that memo, I stress-tested the key assumptions to understand how fragile the recommendation was.</p>
 
-    <div class="placeholder">
-      <p class="placeholder-label">Your stress test result</p>
-      <p>[PASTE YOUR STRESS TEST RESULT HERE — copy the "flip row" from your scenario table (the row where the surge call changed) and the conclusion paragraph your code printed. Example: "When driver availability dropped from 25 to 15 — modeling a scenario where the zone is under-recruited — the drivers-needed figure jumped from 56 to 89, and the gap between supply and demand more than tripled. The surge call was already YES at baseline; what the stress test revealed was that the magnitude of the shortage, not just its direction, was the real operational risk."]</p>
+    <div class="callout">
+      <p>The surge call stayed <strong>YES across every demand scenario</strong> — low, base, and high. Shifting between the ±15% forecast band barely moved the needle on the recommendation itself. What did move it dramatically was driver availability. Dropping drivers online from 25 to 15 — a realistic scenario if the zone is under-recruited or drivers don't respond to surge in time — pushed the drivers-needed figure from 54 to over 90, tripling the supply gap. Pushing trips-per-driver from 3.0 to 2.0, modeling post-concert traffic congestion slowing driver cycles, had a similarly large effect. The conclusion was clear: <strong>the real risk on Friday night isn't whether the forecast is off by 10% — it's whether enough drivers are physically in the zone when the crowd exits at 10pm.</strong> The forecast uncertainty is manageable. The driver positioning decision is not.</p>
     </div>
 
     <p>Stress-testing is not pessimism — it is intellectual honesty. A forecast that looks reliable under every assumption is a forecast worth acting on confidently. A forecast that flips its recommendation when you nudge one number by 30% is a forecast that needs a contingency plan attached to it, not just a point estimate. Real analysts run scenario tables before committing because the operations manager on the other end of the memo will ask "what if you're wrong?" — and "I don't know" is not an acceptable answer when drivers are being repositioned and surge pricing algorithms are being armed.</p>
@@ -586,10 +608,9 @@
     <p class="section-label">07 &mdash; My Analysis</p>
     <h2>What I learned<br>building this <em>from scratch.</em></h2>
 
-    <div class="placeholder">
-      <p class="placeholder-label">Your Step 8 reflection</p>
-      <p>[PASTE YOUR STEP 8 REFLECTION HERE — write it before uploading. This is your own words: what surprised you, what you'd do differently, what you now understand about ML in production that you didn't before the lab. 2–4 paragraphs. This is the section a recruiter will actually read.]</p>
-    </div>
+    <p>Uber is only able to run an efficient service when the data is kept accurate and up to date, and we see how this plays out starting with the first step. Identifying the key contributing factors to rider and driver volume sets up the whole system to work without the silent errors. The backtest showed me how you can't blindly trust a model — you have to work it and test it so that it proves where errors may be hiding. In the stress test, I learned that the demand wasn't the biggest factor for our model; instead it was driver availability and trip efficiency. On busy nights in Bellingham, it is necessary to know when we must go from 25 to 50 active drivers. Based on the time frame, we can know when to activate surge pricing that will bring drivers where we need them to be.</p>
+
+      <p>For a real Bellingham business, I would factor in the weather. While many WWU students are able to walk home after a concert due to being in close proximity, many would opt to take an Uber if it is in freezing temperatures, raining, and more.</p>
   </section>
 
 </main>
